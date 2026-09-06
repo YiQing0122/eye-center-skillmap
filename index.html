@@ -696,6 +696,48 @@ function wedgePath(cx, cy, rOuter, rInner, startA, endA){
   return `M ${so.x} ${so.y} A ${rOuter} ${rOuter} 0 ${large} 0 ${eo.x} ${eo.y} L ${ei.x} ${ei.y} A ${rInner} ${rInner} 0 ${large} 1 ${si.x} ${si.y} Z`;
 }
 
+function deriveCataractCore(ds){
+  if(!ds) return '—';
+  const cc = ds.cataractCert || {};
+  const flacs = ['lensx','z8','catalys'].some(k => cc[k]==='Pass');
+  const basic = ['basic','advanced'].some(k => cc[k]==='Pass');
+  if(flacs) return '白內障手術（含飛秒雷射）';
+  if(basic) return '白內障手術';
+  if(Object.values(cc).some(v => v==='Learning')) return '白內障認證進行中';
+  return '—';
+}
+function deriveRefractiveCore(ds){
+  if(!ds) return '—';
+  const lc = ds.laserCert || {};
+  const lasik = ['visx_s4','amaris_750s','ex500','mel90','ldv','ifs150','fs200','ziemer_z8'];
+  const smile = ['vm_flap','vm500_smile','vm800_pro','z8_clear'];
+  const cats = [];
+  if(lasik.some(k => lc[k]==='Pass')) cats.push('LASIK');
+  if(smile.some(k => lc[k]==='Pass')) cats.push('SMILE');
+  if(lc.evo_icl==='Pass' || ds.iclPass) cats.push('ICL');
+  if(cats.length) return cats.join('、');
+  if(Object.values(lc).some(v => v==='Learning' || v==='待訓')) return '認證進行中';
+  return '—';
+}
+function buildCoreGrid(d){
+  const ds = d.dualSite;
+  const cata = deriveCataractCore(ds);
+  const refr = deriveRefractiveCore(ds);
+  if(cata==='—' && refr==='—') return '';
+  return `
+      <div class="section-title">核心手術能力</div>
+      <div class="core-grid">
+        <div class="core-card">
+          <div class="k">白內障手術能力</div>
+          <div class="v">${cata}</div>
+        </div>
+        <div class="core-card">
+          <div class="k">近視雷射手術能力</div>
+          <div class="v">${refr}</div>
+        </div>
+      </div>`;
+}
+
 function buildRadarScores(d){
   const ds = d.dualSite || {};
   const cc = ds.cataractCert || {};
@@ -1009,6 +1051,7 @@ function renderDetail(){
             <div class="clinic-line">現職院所：${d.clinic}　｜　到職年度：${(d.dualSite && d.dualSite.joinYear) || '未載明'}</div>
           </div>
         </div>
+        ${buildCoreGrid(d)}
         <div class="gap-card">
           <div class="gap-badge">⚠ 無 2022 年專長盤點資料${d.dualSite ? '（惟具手術認證資料）' : ''}</div>
           <p>此醫師為現職醫師（2026/07/15人員配置月報表在冊），但於 2022 年 1 月「醫師專長調查」中查無填答資料，推測為 2022 年後新進，目前尚無完整臨床技能盤點紀錄可供查閱。</p>
@@ -1058,17 +1101,7 @@ function renderDetail(){
         </div>
       </div>
 
-      <div class="section-title">核心手術能力</div>
-      <div class="core-grid">
-        <div class="core-card">
-          <div class="k">白內障手術能力</div>
-          <div class="v">${s.cataract}</div>
-        </div>
-        <div class="core-card">
-          <div class="k">近視雷射手術能力</div>
-          <div class="v">${s.refractive}</div>
-        </div>
-      </div>
+      ${buildCoreGrid(d)}
 
       ${d.dualSite ? `
       <div class="section-title">手術認證資格</div>
