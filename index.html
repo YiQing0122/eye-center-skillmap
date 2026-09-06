@@ -491,7 +491,7 @@
 <body>
 
 <!-- ===================================================================== -->
-<!--  密碼閘門 GATE：晚上把下面 GATE_PASSWORD 的 "請輸入您的密碼" 換成您自訂的密碼即可  -->
+<!--  密碼閘門 GATE：晚上把下面 GATE_PASSWORD 的 "請在這裡填入您的密碼" 換成您自訂的密碼即可  -->
 <!--  例如：const GATE_PASSWORD = "UEC2026map";  （引號要保留，只換中間文字）              -->
 <!-- ===================================================================== -->
 <div id="gateOverlay" style="position:fixed; inset:0; z-index:9999; background:#003E5C; display:flex; align-items:center; justify-content:center; font-family:'Noto Sans TC','Microsoft JhengHei',system-ui,sans-serif;">
@@ -501,7 +501,7 @@
     </div>
     <h2 style="margin:0 0 6px; font-size:19px; color:#1a1a1a; font-weight:700;">大學眼科體系｜醫師技能地圖</h2>
     <p style="margin:0 0 20px; font-size:12.5px; color:#7a7a7a; line-height:1.6;">本頁含機構內部資料，請輸入密碼檢視</p>
-    <input id="gateInput" type="password" placeholder="UVB202609drmap" autocomplete="off"
+    <input id="gateInput" type="password" placeholder="請輸入密碼" autocomplete="off"
       style="width:100%; box-sizing:border-box; padding:11px 14px; font-size:15px; border:1px solid #d8d2c0; border-radius:9px; outline:none; margin-bottom:10px; font-family:inherit;">
     <div id="gateError" style="display:none; color:#c0392b; font-size:12px; margin-bottom:10px;">密碼不正確，請再試一次</div>
     <button id="gateBtn"
@@ -510,8 +510,8 @@
 </div>
 <script>
 (function(){
-  // ↓↓↓ 晚上把這裡的文字換成您的密碼（請輸入密碼） ↓↓↓
-  const GATE_PASSWORD = "UVB202609drmap";
+  // ↓↓↓ 晚上把這裡的文字換成您的密碼（保留左右引號） ↓↓↓
+  const GATE_PASSWORD = "UVB202609drmp";
   // ↑↑↑ 只換中間文字，例如 "UEC2026map" ↑↑↑
 
   const overlay = document.getElementById('gateOverlay');
